@@ -6,24 +6,24 @@ services:
     build:
       context: ./build
       args:
-        PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
-        PYTORCH_VERSION: ${PYTORCH_VERSION:-2.4.1}
+        PYTHON_VERSION: ${PYTHON_VERSION:-3.12}
+        PYTORCH_VERSION: ${PYTORCH_VERSION:-2.7.0}
         COMFYUI_BUILD_REF: ${COMFYUI_BUILD_REF:-}
         # Base on Python image which is base + python + jupyter
-        IMAGE_BASE: ${IMAGE_BASE:-ghcr.io/ai-dock/python:${PYTHON_VERSION:-3.10}-v2-cuda-12.1.1-base-22.04}
+        IMAGE_BASE: ${IMAGE_BASE:-ghcr.io/gitgud5000/python:py312}
       tags:
-        - "ghcr.io/ai-dock/comfyui:${IMAGE_TAG:-pytorch-${PYTORCH_VERSION:-2.3.0}-py3.10-v2-cuda-12.1.1-base-22.04}"
+        - "ghcr.io/gitgud5000/comfyui:${IMAGE_TAG:-v1-redo}"
         
-    image: ghcr.io/ai-dock/comfyui:${IMAGE_TAG:-pytorch-${PYTORCH_VERSION:-2.3.0}-py3.10-v2-cuda-12.1.1-base-22.04}
+    image: ghcr.io/gitgud5000/comfyui:${IMAGE_TAG:-v1-redo}
     
-    ## For Nvidia GPU's - You probably want to uncomment this
-    #deploy:
-    #  resources:
-    #    reservations:
-    #      devices:
-    #        - driver: nvidia
-    #          count: all
-    #          capabilities: [gpu]
+    ## For Nvidia GPU's - Enabled for RTX 5090
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
     
     devices:
       - "/dev/dri:/dev/dri"

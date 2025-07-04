@@ -40,3 +40,4 @@ build_common_run_tests() {
 }
 
 build_common_main "$@"
+source /opt/ai-dock/bin/build/layer1/clean.sh

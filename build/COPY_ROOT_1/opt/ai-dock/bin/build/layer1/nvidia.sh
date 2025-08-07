@@ -2,6 +2,7 @@
 
 build_nvidia_main() {
     build_nvidia_install_comfyui
+    # source /opt/ai-dock/bin/build/layer1/source_builds.sh
     build_common_run_tests
     build_nvidia_run_tests
 }

@@ -11,9 +11,9 @@ build_nvidia_install_deps() {
     "$COMFYUI_VENV_PIP" install --no-cache-dir \
         torch==${PYTORCH_VERSION} \
         torchvision \
-        torchaudio \
-        xformers \
         --index-url=https://download.pytorch.org/whl/$short_cuda_version
+        # xformers \
+        # torchaudio \
 }
 
 build_nvidia_run_tests() {

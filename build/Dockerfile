@@ -40,6 +40,24 @@ ARG COMFYUI_BUILD_REF
 ENV COMFYUI_BUILD_REF=${COMFYUI_BUILD_REF}
 COPY --chown=0:1111 ./COPY_ROOT_1/ /
 RUN set -eo pipefail && /opt/ai-dock/bin/build/layer1/init.sh | tee -a /var/log/build.log
+# RUN chmod +x /opt/ai-dock/bin/build/layer1/source_builds.sh && \
+    # set -eo pipefail && /opt/ai-dock/bin/build/layer1/source_builds.sh | tee -a /var/log/build.log
+
+# Build source libraries SageAttention
+COPY --chown=0:1111 ./COPY_ROOT_2/ /
+RUN chmod +x /opt/ai-dock/bin/build/layer2/source_builds_sageattn.sh  && \
+    set -eo pipefail && /opt/ai-dock/bin/build/layer2/source_builds_sageattn.sh | tee -a /var/log/build.log
+
+# Build source libraries Xformers
+COPY --chown=0:1111 ./COPY_ROOT_3/ /
+RUN chmod +x /opt/ai-dock/bin/build/layer3/source_builds_xformers.sh  && \
+    set -eo pipefail && /opt/ai-dock/bin/build/layer3/source_builds_xformers.sh | tee -a /var/log/build.log
+
+# Build remaining source libraries
+COPY --chown=0:1111 ./COPY_ROOT_4/ /
+RUN chmod +x /opt/ai-dock/bin/build/layer4/source_builds_rest.sh  && \
+    set -eo pipefail && /opt/ai-dock/bin/build/layer4/source_builds_rest.sh | tee -a /var/log/build.log
+
 
 # Remove CUDA toolkit after compilation to save space (keep only runtime)
 RUN apt-get update && \

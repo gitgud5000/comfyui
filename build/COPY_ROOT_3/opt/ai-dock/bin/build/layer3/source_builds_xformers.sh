@@ -293,38 +293,38 @@ build_source_xformers22() {
 # 		uv pip uninstall -y xformers || true
 # 	fi
 
-	# Install build dependencies (include pybind11 & packaging helpers)
-	uv pip install --upgrade pip
-	uv pip install ninja cmake wheel setuptools build pybind11
-	# xformers requirements (some may already be satisfied)
-	uv pip install -r requirements.txt || true
+# 	# Install build dependencies (include pybind11 & packaging helpers)
+# 	uv pip install --upgrade pip
+# 	uv pip install ninja cmake wheel setuptools build pybind11
+# 	# xformers requirements (some may already be satisfied)
+# 	uv pip install -r requirements.txt || true
 
-	echo "🛠  Building xformers wheel (CUDA kernels) ..."
-	# Build wheel using PEP 517 via 'python -m build' (works with uv-managed envs)
-	python -m build --wheel --no-isolation -o dist || true
-	WHEEL=$(ls -1 dist/xformers-*.whl 2>/dev/null | head -n1 || true)
-	if [ -z "$WHEEL" ]; then
-		echo "⚠️  PEP 517 build failed, falling back to setup.py bdist_wheel"
-		python setup.py bdist_wheel
-		WHEEL=$(ls -1 dist/xformers-*.whl 2>/dev/null | head -n1 || true)
-	fi
-	if [ -z "$WHEEL" ]; then
-		echo "❌ Failed to produce xformers wheel"; exit 1; fi
-	echo "📦 Built wheel: $WHEEL"
+# 	echo "🛠  Building xformers wheel (CUDA kernels) ..."
+# 	# Build wheel using PEP 517 via 'python -m build' (works with uv-managed envs)
+# 	python -m build --wheel --no-isolation -o dist || true
+# 	WHEEL=$(ls -1 dist/xformers-*.whl 2>/dev/null | head -n1 || true)
+# 	if [ -z "$WHEEL" ]; then
+# 		echo "⚠️  PEP 517 build failed, falling back to setup.py bdist_wheel"
+# 		python setup.py bdist_wheel
+# 		WHEEL=$(ls -1 dist/xformers-*.whl 2>/dev/null | head -n1 || true)
+# 	fi
+# 	if [ -z "$WHEEL" ]; then
+# 		echo "❌ Failed to produce xformers wheel"; exit 1; fi
+# 	echo "📦 Built wheel: $WHEEL"
 
-	uv pip install --force-reinstall "$WHEEL"
+# 	uv pip install --force-reinstall "$WHEEL"
 
-	echo "🔍 Post-install capability check (python -m xformers.info)"
-	if python -m xformers.info 2>/dev/null | grep -qi 'memory_efficient_attention'; then
-		python -m xformers.info || true
-	else
-		echo "⚠️  Could not retrieve xformers.info output (may be limited in build environment)."
-	fi
+# 	echo "🔍 Post-install capability check (python -m xformers.info)"
+# 	if python -m xformers.info 2>/dev/null | grep -qi 'memory_efficient_attention'; then
+# 		python -m xformers.info || true
+# 	else
+# 		echo "⚠️  Could not retrieve xformers.info output (may be limited in build environment)."
+# 	fi
 
-	# Better cleanup (retain installed wheel only)
-	cd /
-	rm -rf /tmp/xformers
-	uv pip uninstall ninja cmake wheel setuptools build pybind11 -y || true  # Remove build deps
-}
+# 	# Better cleanup (retain installed wheel only)
+# 	cd /
+# 	rm -rf /tmp/xformers
+# 	uv pip uninstall ninja cmake wheel setuptools build pybind11 -y || true  # Remove build deps
+# }
 
 build_source_builds_main "$@"

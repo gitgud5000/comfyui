@@ -32,6 +32,7 @@ RUN echo "bust cache"
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         cuda-toolkit-12-8 && \
+    ln -s /usr/local/cuda-12.8 /usr/local/cuda || true && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -42,6 +43,11 @@ COPY --chown=0:1111 ./COPY_ROOT_1/ /
 RUN set -eo pipefail && /opt/ai-dock/bin/build/layer1/init.sh | tee -a /var/log/build.log
 # RUN chmod +x /opt/ai-dock/bin/build/layer1/source_builds.sh && \
     # set -eo pipefail && /opt/ai-dock/bin/build/layer1/source_builds.sh | tee -a /var/log/build.log
+
+RUN apt-get update && \
+    apt-get install -y gcc-10 g++-10 && \
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 && \
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100
 
 # Build source libraries SageAttention
 COPY --chown=0:1111 ./COPY_ROOT_2/ /
@@ -65,6 +71,17 @@ RUN apt-get update && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+
+# Remove compilers and related alternatives after build to reduce image size
+RUN apt-get update && \
+    apt-get purge -y gcc-10 g++-10 && \
+    update-alternatives --remove gcc /usr/bin/gcc-10 || true && \
+    update-alternatives --remove g++ /usr/bin/g++-10 || true && \
+    update-alternatives --auto gcc || true && \
+    update-alternatives --auto g++ || true && \
+    apt-get autoremove -y --purge && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/* /root/.cache/pip || true
 
 # Copy overrides and models into later layers for fast rebuilds
 COPY --chown=0:1111 ./COPY_ROOT_99/ /

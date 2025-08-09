@@ -30,7 +30,7 @@ cleanup_build_artifacts() {
 	
 	# Remove build dependencies
 	source "$COMFYUI_VENV/bin/activate"
-	uv pip uninstall ninja cmake wheel build setuptools-scm -y || true
+	uv pip uninstall ninja cmake wheel build setuptools-scm || true
 	
 	# Clean pip cache
 	uv cache clean || true

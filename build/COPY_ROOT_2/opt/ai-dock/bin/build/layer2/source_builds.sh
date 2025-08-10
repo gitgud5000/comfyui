@@ -7,9 +7,6 @@ set -e
 build_source_builds_main() {
     echo "🔨 Building libraries from source..."
     
-    # Install uv for faster package management if not already installed
-    $COMFYUI_VENV_PIP install uv
-    
     # build_source_torch_setup
     echo "🔄 Rebuilding libraries SageAttention"
     build_source_sageattention

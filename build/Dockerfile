@@ -60,15 +60,15 @@ RUN set -eo pipefail \
     && $COMFYUI_VENV_PIP install -U uv \
     && $COMFYUI_VENV/bin/uv --version || true
 # Build source libraries Xformers
+# Build source libraries SageAttention
+COPY --chown=0:1111 ./COPY_ROOT_2/ /
+RUN chmod +x /opt/ai-dock/bin/build/layer2/source_builds_sageattn.sh  && \
+set -eo pipefail && /opt/ai-dock/bin/build/layer2/source_builds_sageattn.sh | tee -a /var/log/build.log
+
 COPY --chown=0:1111 ./COPY_ROOT_3/ /
 RUN chmod +x /opt/ai-dock/bin/build/layer3/source_builds_xformers.sh  && \
     set -eo pipefail && /opt/ai-dock/bin/build/layer3/source_builds_xformers.sh | tee -a /var/log/build.log
     
-# Build source libraries SageAttention
-COPY --chown=0:1111 ./COPY_ROOT_2/ /
-RUN chmod +x /opt/ai-dock/bin/build/layer2/source_builds_sageattn.sh  && \
-    set -eo pipefail && /opt/ai-dock/bin/build/layer2/source_builds_sageattn.sh | tee -a /var/log/build.log
-
 # Build remaining source libraries
 COPY --chown=0:1111 ./COPY_ROOT_4/ /
 RUN chmod +x /opt/ai-dock/bin/build/layer4/source_builds_rest.sh  && \

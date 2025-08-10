@@ -9,15 +9,52 @@ umask 002
 APT_PACKAGES=(
     #"package-1"
     #"package-2"
+    # bpytop
 )
 # Packages are installed after nodes so we can fix them...
 PIP_PACKAGES=(
-    "opencv-python==4.7.0.72"
+    # "opencv-python==4.7.0.72"
+    "setuptools>=70.0.0"
 )
 
 NODES=(
     "https://github.com/ltdrdata/ComfyUI-Manager"
     "https://github.com/cubiq/ComfyUI_essentials"
+    "https://github.com/talesofai/comfyui-browser"
+    "https://github.com/chrisgoringe/cg-use-everywhere"
+    "https://github.com/kenjiqq/qq-nodes-comfyui"
+    "https://github.com/ltdrdata/ComfyUI-Impact-Pack"
+    "https://github.com/ltdrdata/ComfyUI-Impact-Subpack"
+    "https://github.com/jags111/efficiency-nodes-comfyui"
+    "https://github.com/lodestone-rock/ComfyUI_FluxMod"
+    "https://github.com/rgthree/rgthree-comfy"
+    "https://github.com/lquesada/ComfyUI-Inpaint-CropAndStitch"
+    "https://github.com/kijai/ComfyUI-KJNodes"
+    "https://github.com/crystian/ComfyUI-Crystools"
+    "https://github.com/jags111/efficiency-nodes-comfyui"
+    "https://github.com/ltdrdata/ComfyUI-Inspire-Pack"
+    "https://github.com/Goktug/ComfyUi_NNLatentUpscale"
+    "https://github.com/john-mnz/ComfyUI-Inspyrenet-Rembg"
+    "https://github.com/aria1th/ComfyUI-LogicUtils"
+    "https://github.com/ltdrdata/was-node-suite-comfyui"
+    "https://github.com/LEv145/images-grid-comfy-plugin"
+    "https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes"
+    "https://github.com/pythongosssss/ComfyUI-Custom-Scripts"
+    "https://github.com/MixLabPro/comfyui-mixlab-nodes"
+    "https://github.com/GTSuya-Studio/ComfyUI-Gtsuya-Nodes"
+    "https://github.com/godmt/ComfyUI-List-Utils"
+    "https://github.com/glowcone/comfyui-string-converter"
+    "https://github.com/ltdrdata/comfyui-connection-helper"
+    "https://github.com/giriss/comfy-image-saver"
+    "https://github.com/edelvarden/comfyui_image_metadata_extension"
+    "https://github.com/Jonseed/ComfyUI-Detail-Daemon"
+    "https://github.com/ssitu/ComfyUI_UltimateSDUpscale"
+    "https://github.com/robertvoy/ComfyUI-Distributed"
+    "https://github.com/kijai/ComfyUI-KJNodes"
+    "https://github.com/cubiq/ComfyUI_essentials"
+    "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite"
+    "https://github.com/city96/ComfyUI-GGUF"
+    "https://github.com/Nuked88/ComfyUI-N-Sidebar"
 )
 
 CHECKPOINT_MODELS=(

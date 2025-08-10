@@ -49,15 +49,25 @@ RUN apt-get update && \
     update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 && \
     update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100
 
-# Build source libraries SageAttention
-COPY --chown=0:1111 ./COPY_ROOT_2/ /
-RUN chmod +x /opt/ai-dock/bin/build/layer2/source_builds_sageattn.sh  && \
-    set -eo pipefail && /opt/ai-dock/bin/build/layer2/source_builds_sageattn.sh | tee -a /var/log/build.log
+RUN apt-get update && \
+    apt-get install -y gcc-12 g++-12 && \
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 120 && \
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 120
 
+# Ensure uv is available in the comfyui virtual environment before source builds
+RUN set -eo pipefail \
+    && echo "Installing uv into $COMFYUI_VENV" \
+    && $COMFYUI_VENV_PIP install -U uv \
+    && $COMFYUI_VENV/bin/uv --version || true
 # Build source libraries Xformers
 COPY --chown=0:1111 ./COPY_ROOT_3/ /
 RUN chmod +x /opt/ai-dock/bin/build/layer3/source_builds_xformers.sh  && \
     set -eo pipefail && /opt/ai-dock/bin/build/layer3/source_builds_xformers.sh | tee -a /var/log/build.log
+    
+# Build source libraries SageAttention
+COPY --chown=0:1111 ./COPY_ROOT_2/ /
+RUN chmod +x /opt/ai-dock/bin/build/layer2/source_builds_sageattn.sh  && \
+    set -eo pipefail && /opt/ai-dock/bin/build/layer2/source_builds_sageattn.sh | tee -a /var/log/build.log
 
 # Build remaining source libraries
 COPY --chown=0:1111 ./COPY_ROOT_4/ /
@@ -73,15 +83,15 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 # Remove compilers and related alternatives after build to reduce image size
-RUN apt-get update && \
-    apt-get purge -y gcc-10 g++-10 && \
-    update-alternatives --remove gcc /usr/bin/gcc-10 || true && \
-    update-alternatives --remove g++ /usr/bin/g++-10 || true && \
-    update-alternatives --auto gcc || true && \
-    update-alternatives --auto g++ || true && \
-    apt-get autoremove -y --purge && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /var/cache/apt/* /root/.cache/pip || true
+# RUN apt-get update && \
+#     apt-get purge -y gcc-10 g++-10 && \
+#     update-alternatives --remove gcc /usr/bin/gcc-10 || true && \
+#     update-alternatives --remove g++ /usr/bin/g++-10 || true && \
+#     update-alternatives --auto gcc || true && \
+#     update-alternatives --auto g++ || true && \
+#     apt-get autoremove -y --purge && \
+#     apt-get clean && \
+#     rm -rf /var/lib/apt/lists/* /var/cache/apt/* /root/.cache/pip || true
 
 # Copy overrides and models into later layers for fast rebuilds
 COPY --chown=0:1111 ./COPY_ROOT_99/ /

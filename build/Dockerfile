@@ -31,8 +31,8 @@ RUN echo "bust cache"
 # Install full CUDA toolkit for building, then remove it after compilation
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        cuda-toolkit-12-8 && \
-    ln -s /usr/local/cuda-12.8 /usr/local/cuda || true && \
+        cuda-toolkit-12-9 && \
+    ln -s /usr/local/cuda-12.9 /usr/local/cuda || true && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -65,9 +65,9 @@ COPY --chown=0:1111 ./COPY_ROOT_2/ /
 RUN chmod +x /opt/ai-dock/bin/build/layer2/source_builds_sageattn.sh  && \
 set -eo pipefail && /opt/ai-dock/bin/build/layer2/source_builds_sageattn.sh | tee -a /var/log/build.log
 
-COPY --chown=0:1111 ./COPY_ROOT_3/ /
-RUN chmod +x /opt/ai-dock/bin/build/layer3/source_builds_xformers.sh  && \
-    set -eo pipefail && /opt/ai-dock/bin/build/layer3/source_builds_xformers.sh | tee -a /var/log/build.log
+# COPY --chown=0:1111 ./COPY_ROOT_3/ /
+# RUN chmod +x /opt/ai-dock/bin/build/layer3/source_builds_xformers.sh  && \
+#     set -eo pipefail && /opt/ai-dock/bin/build/layer3/source_builds_xformers.sh | tee -a /var/log/build.log
     
 # Build remaining source libraries
 COPY --chown=0:1111 ./COPY_ROOT_4/ /
@@ -77,7 +77,7 @@ RUN chmod +x /opt/ai-dock/bin/build/layer4/source_builds_rest.sh  && \
 
 # Remove CUDA toolkit after compilation to save space (keep only runtime)
 RUN apt-get update && \
-    apt-get remove -y cuda-toolkit-12-8 && \
+    apt-get remove -y cuda-toolkit-12-9 && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/*
@@ -97,6 +97,10 @@ RUN apt-get update && \
 COPY --chown=0:1111 ./COPY_ROOT_99/ /
 RUN set -eo pipefail && /opt/ai-dock/bin/build/layer99/init.sh | tee -a /var/log/build.log
 ENV PYTHON_DEFAULT_VENV=comfyui
+
+# INSTALL ZSH
+# RUN chmod +x /opt/ai-dock/bin/build/layer99/zsh_setup.sh && \
+#     set -eo pipefail && /opt/ai-dock/bin/build/layer99/zsh_setup.sh | tee -a /var/log/build.log
 
 # Keep init.sh as-is and place additional logic in /opt/ai-dock/bin/preflight.d
 CMD ["init.sh"]

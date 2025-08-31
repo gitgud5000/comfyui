@@ -12,7 +12,11 @@ services:
         IMAGE_BASE: ${IMAGE_BASE:-ghcr.io/gitgud5000/python:py312}
       tags:
         - "ghcr.io/gitgud5000/comfyui:${IMAGE_TAG:-v1-redo}"
-        
+      x-bake:
+        # platforms: [linux/amd64]
+        output:
+          - type=image,name=ghcr.io/gitgud5000/comfyui:${IMAGE_TAG:-v1-redo},push=true,oci-mediatypes=true,compression=zstd,compression-level=13,force-compression=true
+
     image: ghcr.io/gitgud5000/comfyui:${IMAGE_TAG:-v1-redo}
     
     ## For Nvidia GPU's - Enabled for RTX 5090

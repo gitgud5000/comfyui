@@ -12,8 +12,8 @@ build_nvidia_install_deps() {
         torch==${PYTORCH_VERSION} \
         torchvision \
         xformers \
+        torchaudio \
         --index-url=https://download.pytorch.org/whl/$short_cuda_version
-        # torchaudio \
 }
 
 build_nvidia_run_tests() {

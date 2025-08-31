@@ -3,8 +3,8 @@
 ARG IMAGE_BASE="ghcr.io/gitgud5000/python:py312"
 FROM ${IMAGE_BASE}
 
-LABEL org.opencontainers.image.source https://github.com/gitgud5000/comfyui
-LABEL org.opencontainers.image.description "ComfyUI with CUDA 12.8.1 support for RTX 5090 and PyTorch 2.7.0"
+LABEL org.opencontainers.image.source="https://github.com/gitgud5000/comfyui"
+LABEL org.opencontainers.image.description="ComfyUI with CUDA 12.9.1 support for Hopper and PyTorch 2.8"
 LABEL maintainer="GitGud5000"
 
 ENV COMFYUI_VENV=$VENV_DIR/comfyui
